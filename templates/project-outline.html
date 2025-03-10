@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monkeying Around: Chaos Engineering and Robust Web Services</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Monkeying Around</h1>
+        <h2>Chaos Engineering and Robust Web Services</h2>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/project-outline" class="active">Project Outline</a></li>
+            <li><a href="/status">Status</a></li>
+            <li><a href="/scaling">Scaling</a></li>
+        </ul>
+    </nav>
+
+    <section class="content">
+        <h2 class="center-text">Project Outline</h2>
+        <h3 class="left-text">Abstract</h3>
+        <p class="left-text">
+            As Netflix blog puts it, imagine “unleashing a wild monkey with a weapon in your data center (or cloud region) to randomly shoot down instances and chew through cables”.  If they could handle such random anomalies during the workday without customer impact, they could be much more confident that their procedures would work.
+        </p>
+        <p class="left-text">
+            A vast array of challenges arise when attempting to build a software service at scale.  Users may access the service from all over the world, and should see small latencies no matter their location.  Data centers or web endpoints may go down unexpectedly, but traffic must flow.  High traffic from individual users should not impact other users.  And when something goes wrong (and it will), monitoring and alerting will be in place to be able to detect the problem and recover as quickly as possible.
+        </p>
+        <p class="left-text">
+            In order to maintain high availability (measured in percentages, such as 99.9999%, with as many “9s” as possible), we will incorporate automated failure handling into their regular workflows with products such as Chaos Monkey.  Instead of hoping the engineering was done right the first time, We will deliberately trigger failures to practice recovering from them and further improve their tooling to automatically handle such failures or send alerts when manual intervention is needed with the aid of status pages made available to the customers.
+        </p>
+        <p class="left-text">
+            <strong>Problem: </strong>We cannot assume that cloud services will always work all of the time.  It’s much better to practice handling failures in a safe environment rather than when you least expect it.
+        </p>
+        <p class="left-text">
+            <strong>Goal: </strong>We aim to achieve graceful degradation, where the system continues to function under stress without crashing. Real-time monitoring of system performance and error rates helps determine whether the system self-heals or requires intervention.
+        </p>
+
+
+        <h3 class="left-text">Background</h3>
+        <p class="left-text">
+            Our chess game service creates an environment where users can play a single move, and the system calculates the best possible response. The game architecture and structure consists of several components designed to handle user requests, allocate chess boards based on other user's current game states and compute optimal moves.
+        </p>
+        <img src="static/diagram.png" alt="One Move Chess Diagram" width="500">
+        <div class="left-text">
+            <p>The service architecture consists of:</p>
+            <ul>
+                <li>Web UI (VM2) for user interaction.</li>
+                <li>API (VM1) for handling game logic, authentication, and board management.</li>
+                <li>Database (VM1) that stores game data, including moves, notifications, board states, and user accounts.</li>
+                <li>VM1 and VM2 are hosted on Ubuntu 24.04 instances with 1 vCPU and 1 GB RAM.</li>
+            </ul>
+        </div>
+        <div class="left-text">
+            <p>To ensure this architecture is scalable, robust and capable of handling unexpected disruptions, we are applying chaos engineering principles. The chaos engineering process allows us to identify potential weak points in our system by deliberately introducing failures in a controlled and documented manner.</p>
+        </div>           
+        <p class="left-text">
+            In order to maintain high availability (measured in percentages, such as 99.9999%, with as many “9s” as possible), we will incorporate automated failure handling into their regular workflows with products such as Chaos Monkey.  Instead of hoping the engineering was done right the first time, We will deliberately trigger failures to practice recovering from them and further improve their tooling to automatically handle such failures or send alerts when manual intervention is needed with the aid of status pages made available to the customers.
+        </p>
+
+        <h3 class="left-text">User Stories</h3>
+        <p class="left-text">
+            Something in our database goes down causing our downtime for our web service. Our developers are immediately notified that the web service is down, and they refer to the status page to see what specifically is wrong. They see the red visual indicator on the database section, so they proceed to click the “+” symbol on the DB section. They can find the exact error causing the issue and come up with possible solutions to fix it promptly.
+        </p>
+        <p class="left-text">
+            Imagine you're a developer for One Move Chess. People are really enjoying playing the game and it starts to grow globally, millions of users start logging in simultaneously to make their move. Each game, with its unique state and user data, is stored in a central database, but the growing number of users begins to overload the system. Database queries to retrieve game states, validate moves, and update the board slow down, especially during peak hours when many users are trying to make their moves concurrently. To handle the load, you decide to implement database sharding. You shard the database by username, distributing different games across multiple servers. This ensures that when a user makes a move, the query only affects the specific shard containing that game’s state, significantly reducing the load on each individual server. The result is a smooth, lag-free experience, where users can quickly make their move, and pass the game along, even during high-traffic periods. Database sharding allows OneMove Chess to handle many players while keeping performance intact.
+        </p>
+        <p class="left-text">
+            Using load testing tools, we simulate high traffic onto the server. This stress on the server causes the machine hosting the API to crash. Once the status page notices that it cannot reach the API, it marks it as “down.” A developer is then notified that the API is down, and the developer can go in and see exactly what crashed within the status page and solve the issue promptly. 
+        </p>
+
+    </section>
+</body>
+</html>
