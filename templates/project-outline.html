@@ -62,6 +62,56 @@
             In order to maintain high availability (measured in percentages, such as 99.9999%, with as many “9s” as possible), we will incorporate automated failure handling into their regular workflows with products such as Chaos Monkey.  Instead of hoping the engineering was done right the first time, We will deliberately trigger failures to practice recovering from them and further improve their tooling to automatically handle such failures or send alerts when manual intervention is needed with the aid of status pages made available to the customers.
         </p>
 
+
+        <h3 class="left-text">Definitions</h3>
+        <div class="left-text">
+            <p>Status Page</p>
+            <ul>
+                <li><strong>External Monitoring: </strong> The assessment of a web service's performance and availability.</li>
+                <li><strong>Incidents: </strong> Disruptions affecting a web service's normal operation. </li>
+                <li><strong>Failures: </strong> Instances where a web service fails to operate normally due to errors or outages.</li>
+                <li><strong>Downtime: </strong> Duration of a web service is unavailable, due to planned maintenance or unexpected issues.</li>
+                <li><strong>Real-time: </strong> Immediate updates about service status as events occur.</li>
+                <li><strong>Healthy: </strong> The web service functions normally, with no issues or failures reported.</li>
+                <li><strong>Availability: </strong> Whether or not a service can be accessed and utilized by a user.</li>
+            </ul>
+
+            <p>Database Sharding</p>
+            <ul>
+                <li><strong>Shards: </strong>  A smaller part or fragment of a larger database that operates independently. Multiple shards together represent the entire dataset.</li>
+                <li><strong>Scalability: </strong> The ability of a system to handle growing amounts of data or traffic. </li>
+                <li><strong>Vertical Scaling: </strong> Increasing the capacity of a single server or machine by upgrading its hardware (e.g., adding more RAM or a faster CPU) to handle more data or traffic.</li>
+                <li><strong>Horizontal Scaling: </strong> Increasing the capacity of a system by adding more servers or machines to distribute the load. Sharding is an example of horizontal scaling.</li>
+                <li><strong>Hot Spots: </strong> A situation where certain shards become overloaded because data is unevenly distributed. This can lead to performance issues if one shard receives a disproportionate number of queries or data.</li>
+                <li><strong>Hash Function: </strong> A function that converts input data (such as user ID) into a fixed-size value that determines which shard the data will be stored in.</li>
+                <li><strong>Latency: </strong> The delay between a user action (such as a query) and the system's response. Reducing latency improves the speed at which users can access data.</li>
+            </ul>
+
+            <p>Throttling and Rate Limiting</p>
+            <ul>
+                <li><strong>Infrastructure as a service (IaaS): </strong>a pay as you go cloud service that buyers can use, largely for computing, storage, and networking. </li>
+                <li><strong>Throttling: </strong> when requests are intentionally delayed so that they are more spread out over time, decreasing load on servers.  </li>
+                <li><strong>Rate Limiting: </strong> preventing abuse and ensuring equitable access to resources by putting a hard cap on the number of requests a user can make within a certain period of time.</li>
+                <li><strong>Over-provision: </strong> when more than enough infrastructure is bought to meet users’ requests, leading to resource wastage.</li>
+                <li><strong>Under-provision: </strong> when not enough infrastructure is available to meet users’ requests, leading to poor performance.</li>
+            </ul>
+
+            <p>Load Testing</p>
+            <ul>
+                <li><strong>Bottlenecks: </strong> points in the system where performance slows down or fails, usually due to limited capacities or inefficiencies.</li>
+                <li><strong>Throughput: </strong> the amount of data processed by the system within a specific time period, often used as a performance metric. </li>
+                <li><strong>Virtual Users: </strong> In load testing, the simulated users that mimic real users on the system in order to test the systems capacity.</li>
+                <li><strong>Telemetry: </strong> the automated collection and transmission of data from remote sources for monitoring and analysis.</li>
+                <li><strong>Azure Monitor: </strong> a service from Azure that helps monitor the the performance of applications and infrastructure of the system.</li>
+                <li><strong>ARM templates: </strong> Azure Resource Manager templates used to define the resources needed for a system.</li>
+            </ul>
+
+            <p>Fault Injection</p>
+            <ul>
+                <li><strong>Hardware Fault: </strong> A fault simulating a type of hardware failure or malfunction (loss of power, electrical surge, etc).</li>
+                <li><strong>Software Fault: </strong> A fault simulating a type of software failure malfunction (call stack error, race condition, systemd/server software failure, etc.) </li>
+            </ul>
+
         <h3 class="left-text">User Stories</h3>
         <p class="left-text">
             Something in our database goes down causing our downtime for our web service. Our developers are immediately notified that the web service is down, and they refer to the status page to see what specifically is wrong. They see the red visual indicator on the database section, so they proceed to click the “+” symbol on the DB section. They can find the exact error causing the issue and come up with possible solutions to fix it promptly.
@@ -73,6 +123,58 @@
             Using load testing tools, we simulate high traffic onto the server. This stress on the server causes the machine hosting the API to crash. Once the status page notices that it cannot reach the API, it marks it as “down.” A developer is then notified that the API is down, and the developer can go in and see exactly what crashed within the status page and solve the issue promptly. 
         </p>
 
+        <h3 class="left-text">Chaos Engineering Steps</h3>
+        <div class="left-text">
+            <ul>
+                <li><strong>Hypothesis: </strong> We identify potential problem statements.</li>
+                <li><strong>Experiment: </strong> We introduce failures to test the hypothesis. We will disable key components such as the production environment to induce failure and observe the consequences. </li>
+                <li><strong>Evaluation: </strong> We assess the internal and external impact of these disruptions, determining what was affected and how the system responded.</li>
+                <li><strong>Solution: </strong> Based on the results, we fine-tune the system to improve failure handling, automation, and scalability.</li>
+            </ul>
+        </div>
+
+        <h3 class="left-text">Design and Content</h3>
+        <h4 class="left-text">Status Page</h4>
+        <p class="left-text">
+            Objective: Provide timely updates about the performance and availability of the One Move Chess web service.
+        </p>
+        <p class="left-text">
+            How will this help us?
+        </p>
+        <div class="left-text">
+            <ul>
+                <li><strong>Incident Management: </strong> We identify potential problem statements.</li>
+                <li><strong>Scalability & Productivity: </strong> We introduce failures to test the hypothesis. We will disable key components such as the production environment to induce failure and observe the consequences. </li>
+                <li><strong>Chaos Engineering: </strong> External monitoring and bug detection are essential to chaos engineering. Ensuring that our software is in a good and healthy state before launching our chaos monkeys to break everything is critical to chaos engineering. A status page will allow us to define our ability to account for any unplanned disruptions and incidents. </li>
+            </ul>
+        </div>
+        <p class="left-text">
+            Necessary Components of Our Status Page: 
+        </p>
+        <div class="left-text">
+            <ul>
+                <li><strong>Current System Status: </strong> Implement an intuitive label or visual indicator to show us the current status of our web services. This needs to be easy and clear to read at a glance.</li>
+                <li><strong>Incident History and Response Time: </strong> Integrate analytics to display historical performance metrics of our web services. This will help assess our scalability improvements over time, highlighting response times and incident frequency trends. </li>
+                <li><strong>Hosted on a separate server: </strong> Ensure the status page is hosted on a dedicated server, allowing continuous access at all times. </li>
+                <li><strong>Real-Time Updates: </strong> Ensure that the status page updates in real time when an incident occurs, providing immediate visibility to developers. </li>
+                <li><strong>Monitoring and Alerts: </strong> Develop a system to automatically notify our team via email when the status page indicates an error that could lead to service downtime. </li>
+            </ul>
+        </div>
+        <p class="left-text">
+            How will we implement this page:
+        </p>
+        <div class="left-text">
+            <ul>
+                <li><strong>GitHub Repos Exploration: </strong> 100s of companies with examples of their open source code for status pages are available for free. We plan to leverage some of these examples and incorporate their ideas on our status page. Repo: https://github.com/ivbeg/awesome-status-pages.</li>
+                <li><strong>Integration of Existing Tools: </strong> Another approach that we are interested in exploring is rather than developing our own status page, we can look into incorporating an existing tool to monitor our web services. For instance, Gremlin is a tool that specializes in chaos engineering and service monitoring. </li>
+            </ul>
+        </div>
+        <p class="left-text">
+            Below is the mock-ups of the design for our status page. 
+        </p>
+        <div class = center-text>
+            <img src="static/statusmock.png" alt="Status Page Concept" width="500">
+        </div>
     </section>
 </body>
 </html>
