@@ -175,6 +175,282 @@
         <div class = center-text>
             <img src="static/statusmock.png" alt="Status Page Concept" width="500">
         </div>
+
+        <h4 class="left-text">Database Sharding</h4>
+        <p class="left-text">
+            Database Sharding is a technique that involves splitting a large database into smaller, more manageable pieces (which are called shards). Each shard operates independently but together forms the complete dataset. 
+        </p>
+        <p class="left-text">
+            Why do we want to incorporate Database Sharding?
+        </p>
+        <div class="left-text">
+            <ul>
+                <li><strong>Scalability: </strong> One of the primary reasons for sharding is scalability. As data grows, a single database server might struggle to handle the volume and queries efficiently. By breaking the data into shards, you distribute the load across multiple servers, making it possible to handle much larger datasets.</li>
+                <li><strong>Cost-Effectiveness: </strong> Rather than scaling vertically (upgrading to a bigger and more expensive server), sharding allows you to scale horizontally by adding more servers as your dataset grows, which is typically more cost-effective. </li>
+                <li><strong>Performance: </strong> Sharding improves database performance because each shard can be queried independently. Instead of querying one massive table, you’re only querying a smaller subset of the data, which reduces query time. </li>
+                <li><strong>Fault Tolerance: </strong> Sharding also offers a level of fault tolerance. If one shard goes down, the others can continue operating, ensuring that your entire system isn’t compromised by a single failure. </li>
+            </ul>
+        </div>
+
+        <p class="left-text">
+            How is Database Sharding Implemented?
+        </p>
+        <div class="left-text">
+            <ul>
+                <li><strong>Range-Based Sharding: </strong> This method involves dividing the data based on a range of values. For example, we could use  a column like user ID. Users with IDs 1-10,000 go to shard 1, and users 10,001-20,000 go to shard 2, etc. The benefit to Range-Based Sharding is that it is very simple to implement. However, a potential problem with Range-Based Sharding is that it can lead to hot spots, where certain shards become overloaded if the data isn't distributed evenly. </li>
+                <li><strong>Hash-Based Sharding: </strong> In this approach, a hash function is applied to a key (such as a user ID) to determine which shard the data should be stored in. The hash function distributes users evenly across all shards, helping to prevent any single shard from becoming a hot spot. For our purposes, this approach works well. However, issues can arise when scaling to a very large system, particularly when adding new shards, as data would need to be rehashed and redistributed.  </li>
+                <li><strong>Geographic Sharding: </strong> This strategy involves dividing data based on geographic location. For instance, users from North America can be placed in one shard, while users from Europe go into another, and users from Asia in a third shard, etc. This method can optimize performance for globally distributed applications by reducing latency and improving data locality. For our purposes, we could test this by using a VPN to simulate different regions and recording timestamps before and after connection to identify if certain regions experience slower performance. </li>
+            </ul>
+        </div>
+
+        <p class="left-text">
+            The database is a critical component to our software, and we need a systematic way to scale it as the project grows. Additionally, when we intentionally take down sections of our software,  we want to  ensure that a single failure does not compromise the entire database, maintaining the system's overall stability and availability. Therefore, Database Sharding is a cost-effective solution to these problems.
+        </p>
+
+
+
+        <h4 class="left-text">Throttling/Rate Limiting</h4>
+        <p class="left-text">
+            What’s the issue?
+        </p>
+        <div class="left-text">
+            <ul>
+                <li>When scaling via purchasing IaaS(as we are in our comps), there is a need to balance performance and resources used(i.e. money spent). </li>
+                <div class="left-text">
+                    <ul>
+                        <li>Under-provisioning causes poor performance and thus a poor experience for the user. </li>
+                        <li>Over-provisioning causes resource wastage. </li>
+                    </ul>
+                </div>
+                <li>It is very hard to predict what the maximum rate of traffic a site will ever receive. And trying to figure that out is a witch hunt.  The reality is that despite the best balancing of under and over-provisioning, an important aspect of scaling is dealing with relatively short, high bursts of traffic and requests that are above the current capabilities of our infrastructure.  </li>
+            </ul>
+        </div>
+
+        <p class="left-text">
+            What is throttling?
+        </p>
+        <div class="left-text">
+            <ul>
+                <li>Throttling is when requests are intentionally delayed so that they are more spread out over time. Ideally, this keeps requests below a level(indicated by the gray dotted line labeled “Unacceptable performance threshold) where users do not want to use the site or worse, the server crashes. </li>
+            </ul>
+        </div>
+
+        <div class = center-text>
+            <img src="static/throttling.png" alt="Status Page Concept" width="500">
+        </div>
+
+        <p class="left-text">
+            What is rate limiting?
+        </p>
+        <div class="left-text">
+            <ul>
+                <li>Rate limiting is putting a hard cap on the number of requests a user can make within a certain period of time. </li>
+            </ul>
+        </div>
+
+        <div class = center-text>
+            <img src="static/rate.png" alt="Status Page Concept" width="500">
+        </div>
+
+        <p class="left-text">
+            Throttling vs Rate Limiting
+        </p>
+        <div class="left-text">
+            <ul>
+                <li>Throttling does not intentionally drop requests from users. In that sense, it is less severe of an action than rate limiting, which after a certain point blocks any requests.  </li>
+                <li>Rate Limiting protects against bots, DOS, and DDOS attacks. </li>
+                <li>Implementing throttling alone does not ensure that traffic will never crash our infrastructure. The nature of rate limiting and its hard cut off gives a more confident solution to preventing extremely large, unmanageable amounts of traffic. </li>
+            </ul>
+        </div>
+
+        <p class="left-text">
+            How would our project implement this?
+        </p>
+        <div class="left-text">
+            <ul>
+                <li>Broadly, a combination of throttling and rate limiting is the goal. Throttling would be the initial response to any spike in traffic that stresses our servers, but request rates that are above a specified range(which will be experimentally determined) will be rate limited. </li>
+                <div class="left-text">
+                    <ul>
+                        <li>We would track the number of requests based on IP and rate limit if the number of requests goes past a human-reachable limit. </li>
+                        <li>There are a number ways to strategize the specific types of requests that get throttled and rate limited that would need to be automated. Our main strategy will initially be based on simple, manual stress testing of our servers.  </li>
+                        <li>Although not directly the mechanism of throttling and rate limiting, some sort of internal autonomous diagnosing/monitoring tool will be set up. (This tool will also eventually be used give information to the status page) </li>
+                    </ul>
+                </div>
+        
+            </ul>
+        </div>
+
+        <h4 class="left-text">Load Testing</h4>
+        <p class="left-text">
+            What is load testing?
+        </p>
+
+        <div class="left-text">
+            <ul>
+                <li>It examines how a system performs during normal and high loads and determines if a system, piece of software, or computing device can handle high loads given a high demand of users. </li>
+            </ul>
+        </div>
+
+        <p class="left-text">
+            Why is it useful?
+        </p>
+
+        <div class="left-text">
+            <ul>
+                <li><strong>Discovering bottlenecks before deployment: </strong>Load testing identifies performance constraints under heavy usage, allowing issues to be addressed before the system goes live.  </li>
+                <li><strong>Enhances the scalability of the system: </strong>It helps determine how well the system can handle increased user loads, ensuring it can scale effectively as demand grows.  </li>
+                <li><strong>Reduces the risk of downtime in a system: </strong>By simulating high traffic, load testing reveals potential failures, minimizing unexpected outages in production. </li>
+                <li><strong>Improved user experience: </strong>It ensures that the system remains responsive and performs well under stress, providing a smooth experience for users.</li>
+                <li><strong>Reduced failure cost: </strong>Catching performance issues early through load testing prevents costly fixes and losses associated with system crashes or slowdowns in production. </li>
+            </ul>
+        </div>
+
+
+        <p class="left-text">
+            How could we implement it into our comps?
+        </p>
+        <ul>
+            <li>Performing Load Testing on Our Own:</li>
+            <div class="left-text">
+                <ul>
+                    <li><strong>Manual Load Testing:</strong> For a smaller scale, we can manually stress the system by simulating high traffic through concurrent browser sessions, APIs, or scripts. This approach requires less tooling but is limited in scalability. </li>
+                </ul>
+            </div>
+            <li>Using Azure’s Load Testing Tools:</li>
+            <div class="left-text">
+                <ul>
+                    <li><strong>Azure Load Testing Service: </strong> Azure provides a cloud-native load testing service that can simulate high traffic and assess the system’s performance under stress. This service integrates easily with Azure-hosted projects, giving real-time insights into performance metrics like response time, throughput, and error rates. </li>
+                        <div class="left-text">
+                            <ul>
+                                <li><strong>Benefits: </strong> Simplified setup, detailed analytics, and scalability. It can simulate thousands of virtual users, making it ideal for cloud applications.</li>
+                                <li><strong>Implementation: </strong> Configure load testing scenarios for various endpoints of your system. This can be done through the Azure portal or using automation scripts via Azure CLI or ARM templates, allowing the team to schedule regular tests. </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li><strong>Azure Monitor and Application Insights: </strong> To monitor the health and performance of our system under load, we can integrate Azure Monitor and Application Insights. This combination helps gather detailed telemetry on app performance and infrastructure health, allowing proactive adjustments. </li>
+                        <div class="left-text">
+                            <ul>
+                                <li><strong>Benefits: </strong> Provides end-to-end visibility of system performance and automatic detection of performance bottlenecks.</li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </ul>
+    </div>
+
+    <h4 class="left-text">Fault Injection</h4>
+    <p class="left-text">
+        What is fault injection?
+    </p>
+
+    <div class="left-text">
+        <ul>
+            <li>In software testing, fault injection is a technique for improving the coverage of a test by introducing faults to test code paths; in particular error handling code paths that might otherwise rarely be followed. </li>
+            <li>Essentially, it is the practice of intentionally introducing (injecting) bugs, glitches, or other failures (faults) into a piece of software or web application. </li>
+            <li>Fault injection can be manual or automated, and can focus on software faults (unusual situations within the context of the code itself) or hardware faults (unusual situations within the context of the hardware that the software is running on). </li>
+            <li>Hardware faults are harder to implement without direct hardware access, but their results can be simulated fairly effectively via specially-designed software faults designed to simulate loss of/damage to hardware without actually damaging the hardware in question. </li>
+        </ul>
+    </div>
+
+    <p class="left-text">
+        Why perform fault injection?
+    </p>
+    <div class="left-text">
+        <ul>
+            <li><strong>Improved reliability/testing capabilities: </strong>Fault injection allows testing of issues with code by introducing situations that would be difficult to produce organically under normal operation of the software. </li>
+            <li><strong>Testing without user reporting: </strong>Standard bug reporting requires user action and response for each bug found - fault injection gives the programmer the ability to create, test, and resolve bugs. </li>
+        </ul>
+    </div>
+
+    <p class="left-text">
+        Why perform fault injection?
+    </p>
+    <div class="left-text">
+        <ul>
+            <li><strong>Improved reliability/testing capabilities: </strong>Fault injection allows testing of issues with code by introducing situations that would be difficult to produce organically under normal operation of the software. </li>
+            <li><strong>Testing without user reporting: </strong>Standard bug reporting requires user action and response for each bug found - fault injection gives the programmer the ability to create, test, and resolve bugs. </li>
+        </ul>
+    </div>
+
+    <p class="left-text">
+        Determining faults to inject:
+    </p>
+    <div class="left-text">
+        <ul>
+            <li>Software and hardware faults commonly-found in other pieces of software or hardware can be injected. </li>
+            <li>An innovative approach called iBiR: Bug-report-driven Fault Injection proposes parsing bug reports to determine faults to inject. This does require bug reports. </li>
+        </ul>
+    </div>
+
+    <p class="left-text">
+        Implementation into our Comps:
+    </p>
+    <div class="left-text">
+        <ul>
+            <li>The “Chaos Monkey” part of the project will inject software faults into our web application OneMoveChess and the software running on the VMs, and simulate hardware faults on VM1 and VM2, or other hardware that we run the code on. </li>
+        </ul>
+    </div>
+
+    <h3 class="left-text">Conclusion</h3>
+    <p class="left-text">
+        At the end of this project, our goal is to deliver a demo or video that clearly demonstrates how our changes have improved the scalability and resilience of our software. We'll show a before and after comparison using bots to simulate traffic, first with throttling off to observe the strain on the system, and then with throttling on to highlight how the system maintains performance under high demand. We'll also demonstrate how our system handles high query loads effectively through database sharding, ensuring fast response times even with increased traffic. Lastly, we'll introduce fault injection—such as turning off a VM in Azure or modifying the database—to illustrate how our software fails gracefully. Through all of these examples, we will demonstrate how our status page correctly identifies issues and provides visibility into the system's behavior.  This demo will show how our additions allow the software to perform efficiently and remain resilient under real-world conditions.
+    </p>
+
+    <h3 class="left-text">References</h3>
+    <h4 class="left-text">Status Page</h4>
+    <p class="left-text">
+        Instatus, “Our 10 Step Guide on How to Create an Internal Status Page.” <a href="https://instatus.com/blog/internal-status-page-guide">https://instatus.com/blog/internal-status-page-guide</a>
+    </p>
+    <p class="left-text">
+        Hostko Blog,  “Ultimate Guide to Status Pages.” <a href="https://www.hostko.com/blog/network/the-ultimate-guide-to-status-pages-benefits-tools-and-best-practices/#:~">https://www.hostko.com/blog/network/the-ultimate-guide-to-status-pages-benefits-tools-and-best-practices/#:~</a>
+    </p>
+
+    <p class="left-text">
+        Gremlin, “Announcing Status Checks to ensure safe chaos engineering scenarios.” <a href="https://www.gremlin.com/blog/announcing-status-checks-to-ensure-safe-chaos-engineering-scenarios">https://www.gremlin.com/blog/announcing-status-checks-to-ensure-safe-chaos-engineering-scenarios</a>
+    </p>
+
+    <h4 class="left-text">Database Sharding</h4>
+    <p class="left-text">
+        Amazon Web Services, Inc. “What Is Sharding? - Database Sharding Explained - AWS.” Accessed October 4, 2024. <a href="https://aws.amazon.com/what-is/database-sharding/">https://aws.amazon.com/what-is/database-sharding/</a>
+    </p>
+    <p class="left-text">
+        RobBagby. “Sharding Pattern - Azure Architecture Center.” Accessed October 4, 2024. <a href="https://learn.microsoft.com/en-us/azure/architecture/patterns/sharding">https://learn.microsoft.com/en-us/azure/architecture/patterns/sharding</a>
+    <p class="left-text">
+        “Understanding Database Sharding | DigitalOcean.” Accessed October 4, 2024. <a href="https://www.digitalocean.com/community/tutorials/understanding-database-sharding">https://www.digitalocean.com/community/tutorials/understanding-database-sharding</a>
+    </p>
+
+
+    <h4 class="left-text">Throttling/Rate Limiting</h4>
+    <p class="left-text">
+        Elijah Asaolu. 2024. Rate limiting vs. throttling and other API traffic management. LogRocket Blog. Retrieved October 18, 2024 from <a href="https://blog.logrocket.com/advanced-guide-rate-limiting-api-traffic-management/">https://blog.logrocket.com/advanced-guide-rate-limiting-api-traffic-management/</a>
+    </p>
+    <p class="left-text">
+        dlepow. 2023. Advanced request throttling with Azure API Management. Retrieved October 18, 2024 from <a href="https://learn.microsoft.com/en-us/azure/api-management/api-management-sample-flexible-throttling">https://learn.microsoft.com/en-us/azure/api-management/api-management-sample-flexible-throttling</a>
+    </p>
+    <p class="left-text">
+        mumian. 2024. Request limits and throttling - Azure Resource Manager. Retrieved October 18, 2024 from <a href="https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/request-limits-and-throttling">https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/request-limits-and-throttling</a>
+    </p>
+
+
+    <h4 class="left-text">Fault Injection</h4>
+    <p class="left-text">
+        Fault injection - Wikipedia, <a href="https://en.wikipedia.org/wiki/Fault_injection">https://en.wikipedia.org/wiki/Fault_injection</a>
+    </p>
+    <p class="left-text">
+        Ahmed Khanfir, Anil Koyuncu, Mike Papadakis, Maxime Cordy, Tegawende F. Bissyandé, Jacques Klein, and Yves Le Traon. 2023. iBiR: Bug-report-driven Fault Injection. ACM Trans. Softw. Eng. Methodol. 32, 2 (March 2023), 33:1-33:31. <a href="https://doi.org/10.1145/3542946">https://doi.org/10.1145/3542946</a>
+    </p>
+
+
+    <h4 class="left-text">Load Testing</h4>
+    <p class="left-text">
+        “Performance Testing vs. Load Testing vs. Stress Testing” <a href="https://www.blazemeter.com/blog/performance-testing-vs-load-testing-vs-stress-testing#:~:text=Load%20testing%20is%20a%20type,systems%20handle%20expected%20load%20volumes">https://www.blazemeter.com/blog/performance-testing-vs-load-testing-vs-stress-testing#:~:text=Load%20testing%20is%20a%20type,systems%20handle%20expected%20load%20volumes</a>
+    </p>
+    <p class="left-text">
+        “What is Azure Load Testing?” <a href="https://learn.microsoft.com/en-us/azure/load-testing/overview-what-is-azure-load-testing">https://learn.microsoft.com/en-us/azure/load-testing/overview-what-is-azure-load-testing</a>
+    </p>
+
     </section>
 </body>
 </html>
