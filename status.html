@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Status - Monkeying Around</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<style>
+    body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    text-align: center;
+}
+
+header {
+    background-color: #333;
+    color: white;
+    padding: 20px 0;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 32px;
+}
+
+header h2 {
+    margin: 5px 0 0;
+    font-size: 18px;
+    font-weight: 300;
+    color: #bbb;
+}
+
+/* Navigation Bar */
+nav {
+    background-color: #444;
+    padding: 10px 0;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+nav ul li {
+    margin: 0 20px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+    padding: 10px 15px;
+    transition: background 0.3s, border-radius 0.3s;
+}
+
+nav ul li a:hover, .active {
+    background-color: #777;
+    border-radius: 5px;
+}
+
+.content {
+    width: 60%;
+    margin: 20px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.center-text {
+    text-align: center;
+}
+
+.left-text {
+    text-align: left; 
+    margin-left: 20px;
+}
+
+.left-text ul {
+    padding-left: 20px;
+    list-style-position: outside;
+}
+
+</style>
+<body>
+    <header>
+        <h1>Monkeying Around</h1>
+        <h2>Chaos Engineering and Robust Web Services</h2>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="project-outline.html">Project Outline</a></li>
+            <li><a href="status.html" class="active">Status</a></li>
+            <li><a href="scaling.html">Scaling</a></li>
+        </ul>
+    </nav>
+
+    <section class="content">
+        <h2>Status Page</h2>
+        <p>info and screenshots about the status page, fault injection, and notifications.</p>
+    </section>
+</body>
+</html>
