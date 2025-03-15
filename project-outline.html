@@ -125,7 +125,15 @@ nav ul li a:hover, .active {
 
         <h3 class="left-text">Background</h3>
         <p class="left-text">
-            Our chess game service creates an environment where users can play a single move, and the system calculates the best possible response. The game architecture and structure consists of several components designed to handle user requests, allocate chess boards based on other user's current game states and compute optimal moves.
+            Our chess game service creates an environment where users can play a single move and after they have made the move, they are given a new game. The goal of the user is to make the best possible move given the board state. Here is a demo of how to play the game:
+        </p>
+        <video width="640" height="360" controls>
+            <source src="Schiller.mp4" type="video/mp4">
+        </video>
+
+
+        <p class="left-text">
+            The game architecture and structure consists of several components designed to handle user requests, allocate chess boards based on other user's current game states and compute optimal moves.
         </p>
         <img src="diagram.png" alt="One Move Chess Diagram" width="500">
         <div class="left-text">
@@ -262,12 +270,15 @@ nav ul li a:hover, .active {
         <p class="left-text">
             Database Sharding is a technique that involves splitting a large database into smaller, more manageable pieces (which are called shards). Each shard operates independently but together forms the complete dataset. 
         </p>
+        <div class = center-text>
+            <img src="dbscale.png" alt="Database Scaling" width="700">
+        </div>
         <p class="left-text">
             Why do we want to incorporate Database Sharding?
         </p>
         <div class="left-text">
             <ul>
-                <li><strong>Scalability: </strong> One of the primary reasons for sharding is scalability. As data grows, a single database server might struggle to handle the volume and queries efficiently. By breaking the data into shards, you distribute the load across multiple servers, making it possible to handle much larger datasets.</li>
+                <li><strong>Scalability: </strong> One of the primary reasons for sharding is scalability. As data grows, you can either scale vertically or scale horizontally. Scaling vertically is adding more resources to a single database. Instead, database sharding is scaling horizontally to distribute the load across multiple servers, making it possible to handle the large dataset.</li>
                 <li><strong>Cost-Effectiveness: </strong> Rather than scaling vertically (upgrading to a bigger and more expensive server), sharding allows you to scale horizontally by adding more servers as your dataset grows, which is typically more cost-effective. </li>
                 <li><strong>Performance: </strong> Sharding improves database performance because each shard can be queried independently. Instead of querying one massive table, you’re only querying a smaller subset of the data, which reduces query time. </li>
                 <li><strong>Fault Tolerance: </strong> Sharding also offers a level of fault tolerance. If one shard goes down, the others can continue operating, ensuring that your entire system isn’t compromised by a single failure. </li>

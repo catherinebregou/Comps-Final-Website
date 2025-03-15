@@ -105,7 +105,40 @@ nav ul li a:hover, .active {
 
     <section class="content">
         <h2>Scaling the Software</h2>
-        <p> info about database sharding, rate limiting and throttling, and load testing</p>
+        <h3 class="left-text">Database Sharding</h3>
+        <p class="left-text">We knew that database sharding was an essential component of effective scaling. To see why, visit the  <a href="/project-outline">Project Outline</a> tab. After identifying the need for sharding, we needed to determine the best way to implement it for our system. Through research, we considered three different sharding strategies:</p>
+        <div class="left-text">
+        <h4 class="left-text">Geographic Sharding</h4>
+        <p class="left-text">Geographic sharding partitions data based on user location, storing it in regional databases. This method is particularly useful when data residency laws require user data to be stored within specific geographic boundaries—such as the GDPR regulations in the European Union, which mandate that personal data of EU citizens must be processed within the region.</p>
+        <p class="left-text">A major advantage of geographic sharding is reduced latency for users, as their data is stored physically closer to them, making queries faster. However, we wanted to test whether distance had a significant impact on performance in our specific system.</p>
+        <p class="left-text">To do this, we used a VPN in Australia (the farthest location we could test from our database) and another in Chicago (close to our database). Our tests showed no noticeable difference in response time from the user’s perspective. Since our data storage location did not introduce significant latency issues, we ruled out geographic sharding as a necessary solution.</p>
+        <h4 class="left-text">Range-Based Sharding</h4>
+        <p class="left-text">Range-based sharding involves dividing data into shards based on a specific attribute’s value range. For example, users with IDs 1–10,000 might be stored in one shard, while those with IDs 10,001–20,000 would be stored in another.</p>
+        <p class="left-text">The benefits to range-based sharding include that it is simple to implement— the rules for which data belongs to which shard are straightforward, and new shards can be added or removed without affecting existing ones.</p>
+        <p class="left-text">However, hotspots can form, meaning certain shards may become overloaded if many users fall into the same range. Hotspots occur when one range of data is accessed more frequently than others, which can negate the benefits of sharding by creating load imbalances. Since preventing hotspots was a top priority, we decided that range-based sharding was not a suitable approach for our system.</p>
+        <h4 class="left-text">Hash-Based Sharding</h4>
+        <p class="left-text">Hash-based sharding distributes data evenly across shards using a hash function. Instead of assigning data based on a fixed range, a hash function is applied to a key (such as username), and the output determines which shard the data is stored in.</p>
+        <p class="left-text">The benefits to hash-based sharding include that it helps prevent hotspots by distributing data relatively evenly across shards, reducing the risk of any single shard becoming overloaded. </p>
+        <p class="left-text">A downside of hash-based sharding is that if a new shard is needed, the existing data must be redistributed.</p>
+        <p class="left-text">Despite the need for rehashing when scaling up, we determined that hash-based sharding was the best solution for our system because it effectively prevented hotspots and helped to evenly distribute the data.</p>
+
+        <p class="left-text">We implemented hash-based sharding by hashing usernames and distributing users across two separate databases. To demonstrate our approach, we registered 20 users and observed how they were distributed. Here is the distribution of the two databases:</p>
+        <p class="left-text">Database 1: </p>
+        <div class = center-text>
+            <img src="db1.png" alt="Database 1" width="700">
+        </div>
+        <p class="left-text">Database 2: </p>
+        <div class = center-text>
+            <img src="db2.png" alt="Database 2" width="700">
+        </div>
+        <p class="left-text">Our implementation of hash-based sharding successfully achieved our scaling goals. </p>
+        
+
+        <h3 class="left-text">Rate Limiting and Throttling</h3>
+        <p class="left-text">text here</p>
+
+        <h3 class="left-text">Load Testing</h3>
+        <p class="left-text">info here</p>
     </section>
 </body>
 </html>
