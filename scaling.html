@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,86 +9,87 @@
 </head>
 <style>
     body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-    text-align: center;
-}
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+        text-align: center;
+    }
 
-header {
-    background-color: #333;
-    color: white;
-    padding: 20px 0;
-}
+    header {
+        background-color: #333;
+        color: white;
+        padding: 20px 0;
+    }
 
-header h1 {
-    margin: 0;
-    font-size: 32px;
-}
+    header h1 {
+        margin: 0;
+        font-size: 32px;
+    }
 
-header h2 {
-    margin: 5px 0 0;
-    font-size: 18px;
-    font-weight: 300;
-    color: #bbb;
-}
+    header h2 {
+        margin: 5px 0 0;
+        font-size: 18px;
+        font-weight: 300;
+        color: #bbb;
+    }
 
-/* Navigation Bar */
-nav {
-    background-color: #444;
-    padding: 10px 0;
-}
+    /* Navigation Bar */
+    nav {
+        background-color: #444;
+        padding: 10px 0;
+    }
 
-nav ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-}
+    nav ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+    }
 
-nav ul li {
-    margin: 0 20px;
-}
+    nav ul li {
+        margin: 0 20px;
+    }
 
-nav ul li a {
-    text-decoration: none;
-    color: white;
-    font-size: 18px;
-    padding: 10px 15px;
-    transition: background 0.3s, border-radius 0.3s;
-}
+    nav ul li a {
+        text-decoration: none;
+        color: white;
+        font-size: 18px;
+        padding: 10px 15px;
+        transition: background 0.3s, border-radius 0.3s;
+    }
 
-nav ul li a:hover, .active {
-    background-color: #777;
-    border-radius: 5px;
-}
+    nav ul li a:hover,
+    .active {
+        background-color: #777;
+        border-radius: 5px;
+    }
 
-.content {
-    width: 60%;
-    margin: 20px auto;
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
+    .content {
+        width: 60%;
+        margin: 20px auto;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
 
-.center-text {
-    text-align: center;
-}
+    .center-text {
+        text-align: center;
+    }
 
-.left-text {
-    text-align: left; 
-    margin-left: 20px;
-}
+    .left-text {
+        text-align: left;
+        margin-left: 20px;
+    }
 
-.left-text ul {
-    padding-left: 20px;
-    list-style-position: outside;
-}
-
+    .left-text ul {
+        padding-left: 20px;
+        list-style-position: outside;
+    }
 </style>
+
 <body>
     <header>
         <h1>Monkeying Around</h1>
@@ -106,195 +108,258 @@ nav ul li a:hover, .active {
     <section class="content">
         <h2>Scaling the Software</h2>
         <h3 class="left-text">Database Sharding</h3>
-        <p class="left-text">We knew that database sharding was an essential component of effective scaling. To see why, visit the  <a href="/project-outline">Project Outline</a> tab. After identifying the need for sharding, we needed to determine the best way to implement it for our system. Through research, we considered three different sharding strategies:</p>
+        <p class="left-text">We knew that database sharding was an essential component of effective scaling. To see why,
+            visit the <a href="/project-outline">Project Outline</a> tab. After identifying the need for sharding, we
+            needed to determine the best way to implement it for our system. Through research, we considered three
+            different sharding strategies:</p>
         <div class="left-text">
-        <h4 class="left-text">Geographic Sharding</h4>
-        <p class="left-text">Geographic sharding partitions data based on user location, storing it in regional databases. This method is particularly useful when data residency laws require user data to be stored within specific geographic boundaries—such as the GDPR regulations in the European Union, which mandate that personal data of EU citizens must be processed within the region.</p>
-        <p class="left-text">A major advantage of geographic sharding is reduced latency for users, as their data is stored physically closer to them, making queries faster. However, we wanted to test whether distance had a significant impact on performance in our specific system.</p>
-        <p class="left-text">To do this, we used a VPN in Australia (the farthest location we could test from our database) and another in Chicago (close to our database). Our tests showed no noticeable difference in response time from the user’s perspective. Since our data storage location did not introduce significant latency issues, we ruled out geographic sharding as a necessary solution.</p>
-        <h4 class="left-text">Range-Based Sharding</h4>
-        <p class="left-text">Range-based sharding involves dividing data into shards based on a specific attribute’s value range. For example, users with IDs 1–10,000 might be stored in one shard, while those with IDs 10,001–20,000 would be stored in another.</p>
-        <p class="left-text">The benefits to range-based sharding include that it is simple to implement— the rules for which data belongs to which shard are straightforward, and new shards can be added or removed without affecting existing ones.</p>
-        <p class="left-text">However, hotspots can form, meaning certain shards may become overloaded if many users fall into the same range. Hotspots occur when one range of data is accessed more frequently than others, which can negate the benefits of sharding by creating load imbalances. Since preventing hotspots was a top priority, we decided that range-based sharding was not a suitable approach for our system.</p>
-        <h4 class="left-text">Hash-Based Sharding</h4>
-        <p class="left-text">Hash-based sharding distributes data evenly across shards using a hash function. Instead of assigning data based on a fixed range, a hash function is applied to a key (such as username), and the output determines which shard the data is stored in.</p>
-        <p class="left-text">The benefits to hash-based sharding include that it helps prevent hotspots by distributing data relatively evenly across shards, reducing the risk of any single shard becoming overloaded. </p>
-        <p class="left-text">A downside of hash-based sharding is that if a new shard is needed, the existing data must be redistributed.</p>
-        <p class="left-text">Despite the need for rehashing when scaling up, we determined that hash-based sharding was the best solution for our system because it effectively prevented hotspots and helped to evenly distribute the data.</p>
+            <h4 class="left-text">Geographic Sharding</h4>
+            <p class="left-text">Geographic sharding partitions data based on user location, storing it in regional
+                databases. This method is particularly useful when data residency laws require user data to be stored
+                within specific geographic boundaries—such as the GDPR regulations in the European Union, which mandate
+                that personal data of EU citizens must be processed within the region.</p>
+            <p class="left-text">A major advantage of geographic sharding is reduced latency for users, as their data is
+                stored physically closer to them, making queries faster. However, we wanted to test whether distance had
+                a significant impact on performance in our specific system.</p>
+            <p class="left-text">To do this, we used a VPN in Australia (the farthest location we could test from our
+                database) and another in Chicago (close to our database). Our tests showed no noticeable difference in
+                response time from the user’s perspective. Since our data storage location did not introduce significant
+                latency issues, we ruled out geographic sharding as a necessary solution.</p>
+            <h4 class="left-text">Range-Based Sharding</h4>
+            <p class="left-text">Range-based sharding involves dividing data into shards based on a specific attribute’s
+                value range. For example, users with IDs 1–10,000 might be stored in one shard, while those with IDs
+                10,001–20,000 would be stored in another.</p>
+            <p class="left-text">The benefits to range-based sharding include that it is simple to implement— the rules
+                for which data belongs to which shard are straightforward, and new shards can be added or removed
+                without affecting existing ones.</p>
+            <p class="left-text">However, hotspots can form, meaning certain shards may become overloaded if many users
+                fall into the same range. Hotspots occur when one range of data is accessed more frequently than others,
+                which can negate the benefits of sharding by creating load imbalances. Since preventing hotspots was a
+                top priority, we decided that range-based sharding was not a suitable approach for our system.</p>
+            <h4 class="left-text">Hash-Based Sharding</h4>
+            <p class="left-text">Hash-based sharding distributes data evenly across shards using a hash function.
+                Instead of assigning data based on a fixed range, a hash function is applied to a key (such as
+                username), and the output determines which shard the data is stored in.</p>
+            <p class="left-text">The benefits to hash-based sharding include that it helps prevent hotspots by
+                distributing data relatively evenly across shards, reducing the risk of any single shard becoming
+                overloaded. </p>
+            <p class="left-text">A downside of hash-based sharding is that if a new shard is needed, the existing data
+                must be redistributed.</p>
+            <p class="left-text">Despite the need for rehashing when scaling up, we determined that hash-based sharding
+                was the best solution for our system because it effectively prevented hotspots and helped to evenly
+                distribute the data.</p>
 
-        <p class="left-text">We implemented hash-based sharding by hashing usernames and distributing users across two separate databases. To demonstrate our approach, we registered 20 users and observed how they were distributed. Here is the distribution of the two databases:</p>
-        <p class="left-text">Database 1: </p>
-        <div class = center-text>
-            <img src="db1.png" alt="Database 1" width="700">
-        </div>
-        <p class="left-text">Database 2: </p>
-        <div class = center-text>
-            <img src="db2.png" alt="Database 2" width="700">
-        </div>
-        <p class="left-text">Our implementation of hash-based sharding successfully achieved our scaling goals. </p>
-        
-        <br>
+            <p class="left-text">We implemented hash-based sharding by hashing usernames and distributing users across
+                two separate databases. To demonstrate our approach, we registered 20 users and observed how they were
+                distributed. Here is the distribution of the two databases:</p>
+            <p class="left-text">Database 1: </p>
+            <div class=center-text>
+                <img src="db1.png" alt="Database 1" width="700">
+            </div>
+            <p class="left-text">Database 2: </p>
+            <div class=center-text>
+                <img src="db2.png" alt="Database 2" width="700">
+            </div>
+            <p class="left-text">Our implementation of hash-based sharding successfully achieved our scaling goals. </p>
 
-        <h3>Rate Limiting and Throttling</h3>
-        <p>When scaling web services and APIs, managing traffic and ensuring system stability is paramount. To achieve this, rate limiting and throttling are employed to control the flow of requests and prevent system overload. There are various policies available for rate limiting and throttling, each with its own strengths and use cases.</p>
-        <div class="left-text">
-            <h4 class="left-text">Rate Limiting Policies</h4>
-            <p class="left-text">Rate limiting is the process of restricting the number of requests a client can make to a server within a specific time frame. Among the different strategies, we have chosen the Fixed Window Policy for its simplicity and ease of implementation and testing.</p>
+            <br>
+
+            <h3>Rate Limiting and Throttling</h3>
+            <p>When scaling web services and APIs, managing traffic and ensuring system stability is paramount. To
+                achieve this, rate limiting and throttling are employed to control the flow of requests and prevent
+                system overload. There are various policies available for rate limiting and throttling, each with its
+                own strengths and use cases.</p>
             <div class="left-text">
-                <ul>
-                    <li>Fixed Window Policy: This approach divides time into fixed intervals, or "windows," and allows a predefined number of requests within each window. For example, if the limit is set to 100 requests per minute, the counter resets at the start of each new minute. This method is straightforward and predictable, making it ideal for scenarios where simplicity is a priority. However, it can lead to burst traffic at the beginning of each window.</li>
-                </ul>
+                <h4 class="left-text">Rate Limiting Policies</h4>
+                <p class="left-text">Rate limiting is the process of restricting the number of requests a client can
+                    make to a server within a specific time frame. Among the different strategies, we have chosen the
+                    Fixed Window Policy for its simplicity and ease of implementation and testing.</p>
+                <div class="left-text">
+                    <ul>
+                        <li>Fixed Window Policy: This approach divides time into fixed intervals, or "windows," and
+                            allows a predefined number of requests within each window. For example, if the limit is set
+                            to 100 requests per minute, the counter resets at the start of each new minute. This method
+                            is straightforward and predictable, making it ideal for scenarios where simplicity is a
+                            priority. However, it can lead to burst traffic at the beginning of each window.</li>
+                    </ul>
                     Other common rate limiting policies include:
-                <ul>
-                    <li>Sliding Window Log: Tracks individual request timestamps and calculates the rate within a rolling time window. This approach is more precise but requires more storage.</li>
-                    <li>Token Bucket: Uses tokens that are added to a bucket at a fixed rate. Each request consumes a token, and once the bucket is empty, requests are denied.</li>
-                </ul>
-            </div>
-            
-            <h4 class="left-text">Throttling Policies</h4>
-            <p class="left-text">Throttling is the process of regulating the rate at which requests are processed to prevent overloading system resources. Unlike rate limiting, which restricts the total number of requests over a period of time, throttling focuses on controlling the concurrency of active requests, ensuring that the system does not exceed its capacity and that requests are not dropped.</p>
-            <div class="left-text">
-                <ul>
-                    <li>Concurrency Limiter: This policy sets a hard limit on the number of concurrent requests that can be processed at any given time. If the limit is reached, additional requests are queued or rejected until the current requests are completed. This approach is highly effective in managing resource-intensive operations and protecting system stability.</li>
-                </ul>
+                    <ul>
+                        <li>Sliding Window Log: Tracks individual request timestamps and calculates the rate within a
+                            rolling time window. This approach is more precise but requires more storage.</li>
+                        <li>Token Bucket: Uses tokens that are added to a bucket at a fixed rate. Each request consumes
+                            a token, and once the bucket is empty, requests are denied.</li>
+                    </ul>
+                </div>
+
+                <h4 class="left-text">Throttling Policies</h4>
+                <p class="left-text">Throttling is the process of regulating the rate at which requests are processed to
+                    prevent overloading system resources. Unlike rate limiting, which restricts the total number of
+                    requests over a period of time, throttling focuses on controlling the concurrency of active
+                    requests, ensuring that the system does not exceed its capacity and that requests are not dropped.
+                </p>
+                <div class="left-text">
+                    <ul>
+                        <li>Concurrency Limiter: This policy sets a hard limit on the number of concurrent requests that
+                            can be processed at any given time. If the limit is reached, additional requests are queued
+                            or rejected until the current requests are completed. This approach is highly effective in
+                            managing resource-intensive operations and protecting system stability.</li>
+                    </ul>
                     Other common rate limiting policies include:
-                <ul>
-                    <li>Queue-Based Throttling: Requests are queued and processed at a controlled rate.</li>
-                </ul>
+                    <ul>
+                        <li>Queue-Based Throttling: Requests are queued and processed at a controlled rate.</li>
+                    </ul>
+                </div>
+                <p>By implementing the Fixed Window Policy for rate limiting and the Concurrency Limiter for throttling,
+                    we achieve a balance between simplicity, efficiency, and system protection.</p>
+
+                <p>In order to implement this in our code, we used a middleware pacakage called "RateLimiting"
+                    (documented by Microsoft <a
+                        href="https://learn.microsoft.com/en-us/aspnet/core/performance/rate-limit?view=aspnetcore-9.0">here</a>).
+                    This middleware helped us implement both rate limiting and throttling as it contained fixed-window
+                    policies as well as concurrency policies.</p>
+                <p>The user, should they be rate limited, is given a pop up error. Specfically a HTTP 429 error. 429 is
+                    the standard error sent to indicate that a user is sending too many requests and needs to slow down.
+                </p>
+                <p class="left-text">Rate Limiting Live Example: </p>
+                <div class="left-text">
+                    <p class="left-text">In this example, we have purposely lowered the threshold at which rate limiting
+                        kicks in to 2 requests per 10 seconds. Clicking the "Chess" button at the top sends more than 2
+                        requests, and thus we get rate limited and a 429 error is shown. </p>
+                </div>
+                <div class="center-text">
+                    <video width="700" controls>
+                        <source src="RL_Demo.mp4" type="video/mp4">
+                        Your browser does not support the video.
+                    </video>
+                </div>
+
+                <p>In order to test our rate limiting, we used bots(which were part of out load testing suite) to reach
+                    the rate limit. Below shows the results of the test, at the exact point where the bots started to
+                    report that they were running into 429 errors. Initially, they show 0 failures, but on line 8777, we
+                    see out first bot that gets a 429 error.</p>
+                <p class="left-text">Rate Limting Test Image: </p>
+                <div class=center-text>
+                    <img src="rl_testimage.png" alt="Rate limting test image" width="700">
+                </div>
             </div>
-            <p>By implementing the Fixed Window Policy for rate limiting and the Concurrency Limiter for throttling, we achieve a balance between simplicity, efficiency, and system protection.</p>
-    
-            <p>In order to implement this in our code, we used a middleware pacakage called "RateLimiting" (documented by Microsoft <a href="https://learn.microsoft.com/en-us/aspnet/core/performance/rate-limit?view=aspnetcore-9.0">here</a>). This middleware helped us implement both rate limiting and throttling as it contained fixed-window policies as well as concurrency policies.</p>
-            <p>The user, should they be rate limited, is given a pop up error. Specfically a HTTP 429 error. 429 is the standard error sent to indicate that a user is sending too many requests and needs to slow down.</p>
-            <p class="left-text">Rate Limiting Live Example: </p>
-            <div class="left-text">
-                <p class="left-text">In this example, we have purposely lowered the threshold at which rate limiting kicks in to 2 requests per 10 seconds. Clicking the "Chess" button at the top sends more than 2 requests, and thus we get rate limited and a 429 error is shown. </p>
-            </div>
+
+
+            <h3 class="left-text">Load Testing</h3>
+            <p class="left-text">
+                We saw that load testing was crucial for making sure that our system could handle increasing traffic
+                while maintaining performance and stability. To see why, visit the <a href="/project-outline">Project
+                    Outline</a> tab. After seeing the need for load testing, we explored different methods to
+                simulate high user activity and assess our system's performance under heavy load. Through testing, we
+                came up with the following
+                methods:
+            </p>
+
+
+            <h4 class="left-text">Simulated User Load</h4>
+            <p class="left-text">
+                Simulated user load testing involves creating virtual bot users that perform real gameplay actions such
+                as registering,
+                logging in, making moves, and joining games. This allows us to measure response times and API efficiency
+                under different traffic conditions.
+            </p>
+            <p class="left-text">
+                One of the key advantages of simulated load testing is its ability to simulate real-world scenarios
+                without
+                affecting actual players.
+            </p>
+            <p class="left-text">
+                To achieve this, we created python load testing script that:
+            </p>
+            <ul class="left-text">
+                <li>Registers and authenticates bot users dynamically based on test parameters.</li>
+                <li>Assigns users to games while keeping bot activity separate from real players.</li>
+                <li>Tracks API response times, errors, and performance bottlenecks.</li>
+            </ul>
+
+
             <div class="center-text">
-                <video width="700" controls>
-                    <source src="RL_Demo.mp4" type="video/mp4">
-                    Your browser does not support the video.
-                </video>
+                <img src="loadtest.png" alt="Simulated User Load Testing" width="700">
+
+
             </div>
-            
-            <p>In order to test our rate limiting, we used bots(which were part of out load testing suite) to reach the rate limit. Below shows the results of the test, at the exact point where the bots started to report that they were running into 429 errors. Initially, they show 0 failures, but on line 8777, we see out first bot that gets a 429 error.</p>
-            <p class="left-text">Rate Limting Test Image: </p>
-            <div class = center-text>
-                <img src="rl_testimage.png" alt="Rate limting test image" width="700">
+
+
+            <h4 class="left-text">Stress Testing</h4>
+            <p class="left-text">
+                Stress testing examines how the system performs under extreme conditions, pushing it beyond typical
+                usage levels to find out where our failure points are, and see how many users our system can support at
+                the same time before
+                crashing.
+            </p>
+            <p class="left-text">
+                We implemented stress testing by:
+            </p>
+            <ul class="left-text">
+                <li>Gradually increasing the number of bot users and the frequency of moves.</li>
+                <li>Measuring response times and system behavior under increasing load.</li>
+                <li>Identifying bottlenecks and optimizing resource allocation.</li>
+            </ul>
+
+
+            <p class="left-text">
+                Instead of using external monitoring tools manually logged our info to track API
+                performance and detect issues in real time, rather than using cloud based tracking methods.
+            </p>
+
+
+            <div class="center-text">
+                <img src="log.png" alt="Stress Testing Logs" width="700">
             </div>
-        </div>
 
 
-        <h3 class="left-text">Load Testing</h3>
-           <p class="left-text">
-               We saw that load testing was crucial for making sure that our system could handle increasing traffic
-               while maintaining performance and stability. To see why, visit the <a href="/project-outline">Project
-                   Outline</a> tab. After seeing the need for load testing, we explored different methods to
-               simulate high user activity and assess our system's performance under heavy load. Through testing, we came up with the following
-               methods:
-           </p>
+            <h4 class="left-text">User & Game Type Segmentation</h4>
+            <p class="left-text">
+                To make sure that real players using our service were not affected by test bot activity, we implemented
+                a distinction between test
+                data and actual gameplay. We did this by adding two fields to our database:
+            </p>
 
 
-           <h4 class="left-text">Simulated User Load</h4>
-           <p class="left-text">
-               Simulated user load testing involves creating virtual bot users that perform real gameplay actions such as registering,
-               logging in, making moves, and joining games. This allows us to measure response times and API efficiency
-               under different traffic conditions.
-           </p>
-           <p class="left-text">
-               One of the key advantages of simulated load testing is its ability to simulate real-world scenarios without
-               affecting actual players.
-           </p>
-           <p class="left-text">
-               To achieve this, we created python load testing script that:
-           </p>
-           <ul class="left-text">
-               <li>Registers and authenticates bot users dynamically based on test parameters.</li>
-               <li>Assigns users to games while keeping bot activity separate from real players.</li>
-               <li>Tracks API response times, errors, and performance bottlenecks.</li>
-           </ul>
+            <table class="left-text" border="1">
+                <tr>
+                    <th>Category</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><strong>User Type</strong></td>
+                    <td>Separates <strong>regular</strong> users (who track progress) from <strong>bot</strong> users
+                        (who execute scripted actions for testing).</td>
+                </tr>
+                <tr>
+                    <td><strong>Game Type</strong></td>
+                    <td>Distinguishes between <strong>standard games</strong> (competitive matches) and <strong>load
+                            test games</strong> (used only for performance evaluation).</td>
+                </tr>
+            </table>
 
 
-           <div class="center-text">
-               <img src="loadtest.png" alt="Simulated User Load Testing" width="700">
+            <p class="left-text">
+                This implementation allowed us to maintain a fair experience for real users while running large-scale
+                simulations.
+            </p>
 
 
-           </div>
+            <div class="center-text">
+                <img src="usergametype.png" alt="User and Game Type Database" width="700">
+            </div>
 
 
-           <h4 class="left-text">Stress Testing</h4>
-           <p class="left-text">
-               Stress testing examines how the system performs under extreme conditions, pushing it beyond typical
-               usage levels to find out where our failure points are, and see how many users our system can support at the same time before
-               crashing.
-           </p>
-           <p class="left-text">
-               We implemented stress testing by:
-           </p>
-           <ul class="left-text">
-               <li>Gradually increasing the number of bot users and the frequency of moves.</li>
-               <li>Measuring response times and system behavior under increasing load.</li>
-               <li>Identifying bottlenecks and optimizing resource allocation.</li>
-           </ul>
-
-
-           <p class="left-text">
-               Instead of using external monitoring tools manually logged our info to track API
-               performance and detect issues in real time, rather than using cloud based tracking methods.
-           </p>
-
-
-           <div class="center-text">
-               <img src="log.png" alt="Stress Testing Logs" width="700">
-           </div>
-
-
-           <h4 class="left-text">User & Game Type Segmentation</h4>
-           <p class="left-text">
-               To make sure that real players using our service were not affected by test bot activity, we implemented a distinction between test
-               data and actual gameplay. We did this by adding two fields to our database:
-           </p>
-
-
-           <table class="left-text" border="1">
-               <tr>
-                   <th>Category</th>
-                   <th>Description</th>
-               </tr>
-               <tr>
-                   <td><strong>User Type</strong></td>
-                   <td>Separates <strong>regular</strong> users (who track progress) from <strong>bot</strong> users
-                       (who execute scripted actions for testing).</td>
-               </tr>
-               <tr>
-                   <td><strong>Game Type</strong></td>
-                   <td>Distinguishes between <strong>standard games</strong> (competitive matches) and <strong>load
-                           test games</strong> (used only for performance evaluation).</td>
-               </tr>
-           </table>
-
-
-           <p class="left-text">
-               This implementation allowed us to maintain a fair experience for real users while running large-scale
-               simulations.
-           </p>
-
-
-           <div class="center-text">
-               <img src="usergametype.png" alt="User and Game Type Database" width="700">
-           </div>
-
-
-           <p class="left-text">
-               With these methods we successfully:
-           </p>
-           <ul class="left-text">
-               <li>Simulated realistic player behavior at scale.</li>
-               <li>Identified and optimized performance bottlenecks.</li>
-               <li>Maintained a seamless experience for real players while running intensive load tests.</li>
-           </ul>
+            <p class="left-text">
+                With these methods we successfully:
+            </p>
+            <ul class="left-text">
+                <li>Simulated realistic player behavior at scale.</li>
+                <li>Identified and optimized performance bottlenecks.</li>
+                <li>Maintained a seamless experience for real players while running intensive load tests.</li>
+            </ul>
 
 
     </section>
 </body>
+
 </html>
