@@ -133,9 +133,57 @@ nav ul li a:hover, .active {
         </div>
         <p class="left-text">Our implementation of hash-based sharding successfully achieved our scaling goals. </p>
         
+        <br>
 
-        <h3 class="left-text">Rate Limiting and Throttling</h3>
-        <p class="left-text">text here</p>
+        <h3>Rate Limiting and Throttling</h3>
+        <p>When scaling web services and APIs, managing traffic and ensuring system stability is paramount. To achieve this, rate limiting and throttling are employed to control the flow of requests and prevent system overload. There are various policies available for rate limiting and throttling, each with its own strengths and use cases.</p>
+        <div class="left-text">
+            <h4 class="left-text">Rate Limiting Policies</h4>
+            <p class="left-text">Rate limiting is the process of restricting the number of requests a client can make to a server within a specific time frame. Among the different strategies, we have chosen the Fixed Window Policy for its simplicity and ease of implementation and testing.</p>
+            <div class="left-text">
+                <ul>
+                    <li>Fixed Window Policy: This approach divides time into fixed intervals, or "windows," and allows a predefined number of requests within each window. For example, if the limit is set to 100 requests per minute, the counter resets at the start of each new minute. This method is straightforward and predictable, making it ideal for scenarios where simplicity is a priority. However, it can lead to burst traffic at the beginning of each window.</li>
+                </ul>
+                    Other common rate limiting policies include:
+                <ul>
+                    <li>Sliding Window Log: Tracks individual request timestamps and calculates the rate within a rolling time window. This approach is more precise but requires more storage.</li>
+                    <li>Token Bucket: Uses tokens that are added to a bucket at a fixed rate. Each request consumes a token, and once the bucket is empty, requests are denied.</li>
+                </ul>
+            </div>
+            
+            <h4 class="left-text">Throttling Policies</h4>
+            <p class="left-text">Throttling is the process of regulating the rate at which requests are processed to prevent overloading system resources. Unlike rate limiting, which restricts the total number of requests over a period of time, throttling focuses on controlling the concurrency of active requests, ensuring that the system does not exceed its capacity and that requests are not dropped.</p>
+            <div class="left-text">
+                <ul>
+                    <li>Concurrency Limiter: This policy sets a hard limit on the number of concurrent requests that can be processed at any given time. If the limit is reached, additional requests are queued or rejected until the current requests are completed. This approach is highly effective in managing resource-intensive operations and protecting system stability.</li>
+                </ul>
+                    Other common rate limiting policies include:
+                <ul>
+                    <li>Queue-Based Throttling: Requests are queued and processed at a controlled rate.</li>
+                </ul>
+            </div>
+            <p>By implementing the Fixed Window Policy for rate limiting and the Concurrency Limiter for throttling, we achieve a balance between simplicity, efficiency, and system protection.</p>
+    
+            <p>In order to implement this in our code, we used a middleware pacakage called "RateLimiting" (documented by Microsoft <a href="https://learn.microsoft.com/en-us/aspnet/core/performance/rate-limit?view=aspnetcore-9.0">here</a>). This middleware helped us implement both rate limiting and throttling as it contained fixed-window policies as well as concurrency policies.</p>
+            <p>The user, should they be rate limited, is given a pop up error. Specfically a HTTP 429 error. 429 is the standard error sent to indicate that a user is sending too many requests and needs to slow down.</p>
+            <p class="left-text">Rate Limiting Live Example: </p>
+            <div class="left-text">
+                <p class="left-text">In this example, we have purposely lowered the threshold at which rate limiting kicks in to 2 requests per 10 seconds. Clicking the "Chess" button at the top sends more than 2 requests, and thus we get rate limited and a 429 error is shown. </p>
+            </div>
+            <div class="center-text">
+                <video width="700" controls>
+                    <source src="RL_Demo.mp4" type="video/mp4">
+                    Your browser does not support the video.
+                </video>
+            </div>
+            
+            <p>In order to test our rate limiting, we used bots(which were part of out load testing suite) to reach the rate limit. Below shows the results of the test, at the exact point where the bots started to report that they were running into 429 errors. Initially, they show 0 failures, but on line 8777, we see out first bot that gets a 429 error.</p>
+            <p class="left-text">Rate Limting Test Image: </p>
+            <div class = center-text>
+                <img src="rl_testimage.png" alt="Rate limting test image" width="700">
+            </div>
+        </div>
+
 
         <h3 class="left-text">Load Testing</h3>
         <p class="left-text">info here</p>
